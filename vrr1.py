@@ -1,15 +1,10 @@
-# even numbered process goes for i/o ater 2 sec for 5 sec
+# even numbered process goes for i/o ater 5 sec for 5 sec
 
 a=[]
-total_w=[]
-r_burst=[]
-finish=[]
 total=0
 
 qtm=int (raw_input('Enter time quantum: '))
 n=int(raw_input('Total number of processes: '))
-
-
 
 for i in xrange(n):
 	a.append([])
@@ -47,7 +42,7 @@ while total>0:
 			current=current+a[x][3]
 			a[x][4]=current
 			a[x][3]=0
-		elif a[x][3]>=qtm and a[x][1]<=current:
+		elif a[x][3]>qtm and a[x][1]<=current:
 			a[x][3]=a[x][3]-qtm
 			current=current+qtm
 			total=total-qtm
@@ -61,6 +56,7 @@ while total>0:
 				a[x][3]=0			
 			elif a[x][5]<=qtm:
 				total=total-a[x][5]
+				a[x][3]=a[x][3]-a[x][5]
 				current=current+a[x][5]
 				a[x][7]=5+current
 				a[x][6]=qtm-a[x][5]
@@ -68,19 +64,39 @@ while total>0:
 			if a[x][5]>qtm:
 				total=total-qtm
 				current=current+qtm
+				a[x][3]=a[x][3]-qtm
 				a[x][5]=a[x][5]-qtm
+					
 			else:
-				total=toal-a[x][5]
-				current=current+a[x][3]
+				total=total-a[x][5]
+				current=current+a[x][5]
+				a[x][3]=a[x][3]-a[x][5]
 				a[x][7]=current+5
 				a[x][6]=qtm-a[x][5]		
-
+				
+				
+	if (x+1)<n:
+		x=x+1
+	else:
+		x=0
+	i=0
+	flag1="true"
+	while flag1=="true" and i<n:
+		
+		if (a[i][0]%2!=0):
+			if (a[i][3]!=0):
+				flag1="false"
+		i=i+1
+	if flag1=="true":
+		i=0
+		flag2="true"
+		while flag2=="true" and i<n:
 			
-		if (x+1)<n:
-			x=x+1
-		else:
-			x=0
-	
+			if (a[i][7]!=-1):
+				flag2="false"
+			i=i+1
+	if flag1=="true" and flag2=="false":
+		current=current+1
 print 'Process \t Arrival time \t Burst time \t waiting time'
 
 for i in xrange(n):
